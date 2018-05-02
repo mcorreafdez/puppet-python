@@ -137,8 +137,8 @@ define python::virtualenv (
     }
 
     $distribute_pkg = $distribute ? {
-      true     => 'distribute',
-      default  => 'setuptools',
+      true     => 'distribute setuptools==36.8.0',
+      default  => 'setuptools==36.8.0',
     }
     $pypi_index = $index ? {
       false   => '',
@@ -165,15 +165,16 @@ define python::virtualenv (
     $pip_flags = "${pypi_index} ${proxy_flag} ${pip_args}"
 
     exec { "python_virtualenv_${venv_dir}":
-      command     => "true ${proxy_command} && ${virtualenv_cmd} ${system_pkgs_flag} -p ${python} ${venv_dir} && ${pip_cmd} --log ${venv_dir}/pip.log install ${pip_flags} --upgrade pip && ${pip_cmd} install ${pip_flags} --upgrade ${distribute_pkg}",
-      user        => $owner,
-      creates     => "${venv_dir}/bin/activate",
-      path        => $path,
-      cwd         => '/tmp',
-      environment => $environment,
-      unless      => "grep '^[\\t ]*VIRTUAL_ENV=[\\\\'\\\"]*${venv_dir}[\\\"\\\\'][\\t ]*$' ${venv_dir}/bin/activate", #Unless activate exists and VIRTUAL_ENV is correct we re-create the virtualenv
-      require     => File[$venv_dir],
-    }
+      command     => "true ${proxy_command} && ${virtualenv_cmd} ${system_pkgs_flag} -p ${python} ${venv_dir} && ${pip_cmd} wheel --help > /dev/null 2>&1 && { ${pip_cmd} wheel --version > /dev/null 2>&1 || wheel_support_flag='--no-use-wheel'; } ; { ${pip_cmd} --log ${venv_dir}/pip.log install ${pypi_index} ${proxy_flag} \$wheel_support_flag --upgrade pip==9.0.3 ${distribute_pkg} || ${pip_cmd} --log ${venv_dir}/pip.log install ${pypi_index} ${proxy_flag}  --upgrade pip==9.0.3 ${distribute_pkg} ;}",
+      user        => $owner,
+      creates     => "${venv_dir}/bin/activate",
+      path        => $path,
+      cwd         => '/tmp',
+      environment => $environment,
+      unless      => "grep '^[\\t ]*VIRTUAL_ENV=[\\\\'\\\"]*${venv_dir}[\\\"\\\\'][\\t ]*$' ${venv_dir}/bin/activate", #Unless activate exists and VIRTUAL_ENV is correct we re-create the virtualenv
+      require     => File[$venv_dir],
+    }
+
 
     if $requirements {
       exec { "python_requirements_initial_install_${requirements}_${venv_dir}":
