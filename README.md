@@ -1,42 +1,28 @@
-# puppet-python [![Build Status](https://travis-ci.org/stankevich/puppet-python.svg?branch=master)](https://travis-ci.org/stankevich/puppet-python)
+# puppet-python [![Build Status](https://travis-ci.org/voxpupuli/puppet-python.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet-python)
 
 Puppet module for installing and managing python, pip, virtualenvs and Gunicorn virtual hosts.
 
-===
+**Please note:** The module [stankevich/python](https://forge.puppet.com/stankevich/python) has been deprecated and is now available under Vox Pupuli: [puppet/python](https://forge.puppet.com/puppet/python).
 
-# Compatibility #
+## Compatibility #
 
 See `.travis.yml` for compatibility matrix.
 
-* Puppet v3 (with the future parser)
 * Puppet v4
+* Puppet v5
 
-## Ruby versions
-
-* 1.8.7 - Puppet 3
-* 1.9.3 - Puppet 3
-* 2.0.0 - Puppet 3
-* 2.1.9 - Puppet 3 & 4
-
-## OS Distributions ##
+### OS Distributions ##
 
 This module has been tested to work on the following systems.
 
-* Debian 6
-* Debian 7
 * Debian 8
 * Debian 9
-* EL 5
 * EL 6
 * EL 7
 * Gentoo (and Sabayon)
 * Suse 11
-* Ubuntu 10.04
-* Ubuntu 12.04
 * Ubuntu 14.04
 * Ubuntu 16.04
-
-===
 
 ## Installation
 
@@ -98,6 +84,8 @@ Installs and manages packages from pip.
 **proxy** - Proxy server to use for outbound connections. Default: none
 
 **environment** - Additional environment variables required to install the packages. Default: none
+
+**extras** - Extra features provided by the package which should be installed. Default: none
 
 **egg** - The egg name to use. Default: `$name` of the class, e.g. cx_Oracle
 
@@ -316,7 +304,7 @@ python::python_dotfiles:
 ### Using SCL packages from RedHat or CentOS
 
 To use this module with Linux distributions in the Red Hat family and python distributions
-from softwarecollections.org, set python::provider to 'rhscl' and python::version to the name 
+from softwarecollections.org, set python::provider to 'rhscl' and python::version to the name
 of the collection you want to use (e.g., 'python27', 'python33', or 'rh-python34').
 
 ## Release Notes
@@ -339,6 +327,6 @@ Currently, the changes you need to make are as follows:
 * All pip definitions MUST include the owner field which specifies which user owns the virtualenv that packages will be installed in.  Adding this greatly improves performance and efficiency of this module.
 * You must explicitly specify pip => true in the python class if you want pip installed.  As such, the pip package is now independent of the dev package and so one can exist without the other.
 
-## Authors
+## Contributors
 
-[Sergey Stankevich](https://github.com/stankevich) | [Shiva Poudel](https://github.com/shivapoudel) | [Peter Souter](https://github.com/petems) | [Garrett Honeycutt](http://learnpuppet.com)
+Check out [Github contributors](https://github.com/voxpupuli/puppet-python/graphs/contributors).
