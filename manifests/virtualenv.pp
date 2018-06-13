@@ -172,7 +172,7 @@ define python::virtualenv (
     $pip_flags = "${pypi_index} ${proxy_flag} ${pip_args}"
 
     exec { "python_virtualenv_${venv_dir}":
-      command     => "true ${proxy_command} && ${virtualenv_cmd} ${system_pkgs_flag} -p ${python} ${venv_dir} && ${pip_cmd} --log ${venv_dir}/pip.log install ${pip_flags} --upgrade pip==9.0.3 && ${pip_cmd} install ${pip_flags} --upgrade ${distribute_pkg}",
+      command     => "true ${proxy_command} && ${virtualenv_cmd} ${system_pkgs_flag} -p ${python} ${venv_dir} && ${pip_cmd} --log ${venv_dir}/pip.log install ${pip_flags} --upgrade pip==9.0.3 && ${pip_cmd} install ${pip_flags} -I ${distribute_pkg}",
       user        => $owner,
       creates     => "${venv_dir}/bin/activate",
       path        => $path,
