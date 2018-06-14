@@ -173,16 +173,21 @@ class python::install {
     }
     default: {
 
-      package { 'pip':
-        ensure  => $pip_ensure,
-        require => Package['python'],
-      }
+      if $python::use_epel == true {
+      include 'epel'
 
-      if $pythondev {
-        package { 'python-dev':
-          ensure => $dev_ensure,
-          name   => $pythondev,
-          alias  => $pythondev,
+        package { 'pip':
+          ensure  => $pip_ensure,
+          require => Package['python'],
+        }
+
+        if $pythondev {
+          package { 'python-dev':
+            ensure => $dev_ensure,
+            name   => $pythondev,
+            alias  => $pythondev,
+            require => Yumrepo['epel'],
+          }
         }
       }
 
